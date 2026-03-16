@@ -6,7 +6,7 @@
 @section('content')
 <div class="mx-auto space-y-6">
     @if(session('success'))
-    <div class="p-4 bg-green-50 border border-green-100 rounded-xl text-green-600 flex items-center space-x-3 animate-in fade-in slide-in-from-top-2 duration-300">
+    <div class="p-4 bg-green-50 border border-green-100 rounded-xl text-green-600 flex items-center space-x-3 animate__animated animate__fadeInDown animate__faster">
         <i class="hgi-stroke hgi-checkmark-circle-02"></i>
         <p class="text-xs font-bold uppercase tracking-widest">{{ session('success') }}</p>
     </div>
@@ -28,7 +28,7 @@
             @csrf
             
             <!-- General Settings -->
-            <div x-show="tab === 'general'" class="space-y-6 animate-in fade-in duration-500">
+            <div x-show="tab === 'general'" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     @foreach($settings['general'] ?? [] as $setting)
                     <div class="space-y-1.5">
@@ -46,7 +46,7 @@
             </div>
 
             <!-- Schedule Settings -->
-            <div x-show="tab === 'schedule'" class="space-y-6 animate-in fade-in duration-500" x-cloak>
+            <div x-show="tab === 'schedule'" class="space-y-6" [x-cloak]:hidden x-cloak>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     @foreach($settings['schedule'] ?? [] as $setting)
                     <div class="space-y-1.5">

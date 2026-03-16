@@ -4,10 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') | {{ config('app.name') }}</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-50 h-screen flex items-center justify-center p-6">
+<body class="font-sans antialiased bg-slate-50 text-slate-900 h-screen flex items-center justify-center p-6">
     <div class="max-w-xl w-full text-center">
         <div class="mb-8">
             <i class="@yield('icon') text-8xl text-red-500 opacity-20"></i>

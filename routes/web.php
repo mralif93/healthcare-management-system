@@ -37,6 +37,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 // Doctor routes
 Route::prefix('doctor')->name('doctor.')->middleware(['auth', 'role:doctor'])->group(function () {
     Route::get('/', [\App\Http\Controllers\DoctorController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [\App\Http\Controllers\DoctorProfileController::class, 'show'])->name('profile');
+    Route::put('/profile', [\App\Http\Controllers\DoctorProfileController::class, 'update'])->name('profile.update');
 
     // My Patients
     Route::get('patients', [\App\Http\Controllers\DoctorPatientController::class, 'index'])->name('patients.index');
@@ -52,9 +54,17 @@ Route::prefix('doctor')->name('doctor.')->middleware(['auth', 'role:doctor'])->g
     Route::get('schedule', [\App\Http\Controllers\DoctorScheduleController::class, 'index'])->name('schedule');
 });
 
+// Shared notification routes (all authenticated roles)
+Route::middleware(['auth'])->group(function () {
+    Route::post('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
+});
+
 // Staff routes
 Route::prefix('staff')->name('staff.')->middleware(['auth', 'role:staff'])->group(function () {
     Route::get('/', [\App\Http\Controllers\StaffController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [\App\Http\Controllers\StaffProfileController::class, 'show'])->name('profile');
+    Route::put('/profile', [\App\Http\Controllers\StaffProfileController::class, 'update'])->name('profile.update');
 
     // Patient management for staff
     Route::get('patients', [\App\Http\Controllers\StaffPatientController::class, 'index'])->name('patients.index');

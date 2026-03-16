@@ -14,7 +14,7 @@
     </div>
 
     @if(session('success'))
-    <div class="p-4 bg-green-50 border border-green-100 rounded-xl text-green-600 flex items-center space-x-3 animate-in fade-in slide-in-from-top-2 duration-300">
+    <div class="p-4 bg-green-50 border border-green-100 rounded-xl text-green-600 flex items-center space-x-3 animate__animated animate__fadeInDown animate__faster">
         <i class="hgi-stroke hgi-checkmark-circle-02"></i>
         <p class="text-xs font-bold uppercase tracking-widest">{{ session('success') }}</p>
     </div>

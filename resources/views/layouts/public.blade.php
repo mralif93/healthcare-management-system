@@ -15,6 +15,10 @@
     
     <!-- Hugeicons -->
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -45,7 +49,7 @@
 
     @yield('styles')
 </head>
-<body class="antialiased selection:bg-blue-100 selection:text-blue-900">
+<body class="font-sans antialiased text-slate-900 selection:bg-brand-100 selection:text-brand-900">
     @yield('content')
     @yield('scripts')
 </body>

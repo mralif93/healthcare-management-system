@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Consultation;
 use App\Models\Appointment;
 use App\Models\Patient;
+use App\Models\User;
+use App\Notifications\ConsultationCompleted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +60,12 @@ class DoctorConsultationController extends Controller
         if ($request->filled('appointment_id')) {
             Appointment::where('id', $request->appointment_id)->update(['status' => 'completed']);
         }
+
+        // Notify all admin users about the completed consultation
+        $consultation->load(['patient', 'doctor']);
+        User::where('role', 'admin')->each(function ($admin) use ($consultation) {
+            $admin->notify(new ConsultationCompleted($consultation));
+        });
 
         return redirect()->route('doctor.consultations.show', $consultation)->with('success', 'Consultation saved successfully.');
     }

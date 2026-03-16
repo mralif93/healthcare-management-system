@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\User;
+use App\Notifications\AppointmentBooked;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -53,7 +54,14 @@ class StaffAppointmentController extends Controller
         $nextId = $latest ? (int) substr($latest->appointment_id, 4) + 1 : 1;
         $validated['appointment_id'] = 'APT-' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
 
-        Appointment::create($validated);
+        $appointment = Appointment::create($validated);
+
+        // Notify the assigned doctor
+        $doctor = User::find($appointment->doctor_id);
+        if ($doctor) {
+            $appointment->load('patient');
+            $doctor->notify(new AppointmentBooked($appointment));
+        }
 
         return redirect()->route('staff.appointments.index')->with('success', 'Appointment booked successfully.');
     }

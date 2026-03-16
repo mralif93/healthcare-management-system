@@ -39,12 +39,14 @@ return [
             ['name' => 'My Patients', 'icon' => 'hgi-user-group', 'route' => 'doctor.patients.index'],
             ['name' => 'Consultations', 'icon' => 'hgi-stethoscope', 'route' => 'doctor.consultations.index'],
             ['name' => 'Schedule', 'icon' => 'hgi-calendar-01', 'route' => 'doctor.schedule'],
+            ['name' => 'My Profile', 'icon' => 'hgi-user-edit-01', 'route' => 'doctor.profile'],
         ],
         'staff' => [
             ['name' => 'Dashboard', 'icon' => 'hgi-home-01', 'route' => 'staff.dashboard'],
             ['name' => 'Registration', 'icon' => 'hgi-user-add-01', 'route' => 'staff.patients.create'],
             ['name' => 'Bookings', 'icon' => 'hgi-calendar-add-01', 'route' => 'staff.appointments.create'],
             ['name' => 'Check-in', 'icon' => 'hgi-qr-code-01', 'route' => 'staff.checkin'],
+            ['name' => 'My Profile', 'icon' => 'hgi-user-edit-01', 'route' => 'staff.profile'],
         ],
     ],
 ];
