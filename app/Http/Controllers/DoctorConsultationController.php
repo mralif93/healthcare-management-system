@@ -17,7 +17,7 @@ class DoctorConsultationController extends Controller
         $doctorId = Auth::id();
         $query = Consultation::with('patient')->where('doctor_id', $doctorId);
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $query->whereHas('patient', function($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%')
                   ->orWhere('patient_id', 'like', '%' . $request->search . '%');

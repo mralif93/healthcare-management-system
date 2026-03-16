@@ -12,7 +12,7 @@ class AdminPatientController extends Controller
     {
         $query = Patient::query();
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $query->where(function($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%')
                   ->orWhere('patient_id', 'like', '%' . $request->search . '%')
@@ -20,7 +20,7 @@ class AdminPatientController extends Controller
             });
         }
 
-        if ($request->has('status') && $request->status != '') {
+        if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 

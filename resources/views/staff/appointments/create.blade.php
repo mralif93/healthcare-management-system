@@ -21,7 +21,7 @@
                         class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 outline-none transition-all">
                         <option value="">-- Choose from Registry --</option>
                         @foreach($patients as $patient)
-                            <option value="{{ $patient->id }}">{{ $patient->name }} ({{ $patient->patient_id }})</option>
+                            <option value="{{ $patient->id }}" {{ (old('patient_id', request('patient_id')) == $patient->id) ? 'selected' : '' }}>{{ $patient->name }} ({{ $patient->patient_id }})</option>
                         @endforeach
                     </select>
                 </div>

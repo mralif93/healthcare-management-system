@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Models\User;
 use App\Notifications\AppointmentBooked;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class AdminAppointmentController extends Controller
@@ -56,10 +57,11 @@ class AdminAppointmentController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        // Auto-generate appointment ID (APT-XXXXX)
+        // Auto-generate appointment ID (APT-XXXXX) and QR token
         $latest = Appointment::orderBy('id', 'desc')->first();
         $nextId = $latest ? (int) substr($latest->appointment_id, 4) + 1 : 1;
         $validated['appointment_id'] = 'APT-' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        $validated['qr_token'] = Str::uuid()->toString();
 
         $appointment = Appointment::create($validated);
 

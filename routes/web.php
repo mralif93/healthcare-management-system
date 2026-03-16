@@ -79,6 +79,9 @@ Route::prefix('staff')->name('staff.')->middleware(['auth', 'role:staff'])->grou
     
     // Check-in (as requested in navigation)
     Route::get('checkin', [\App\Http\Controllers\StaffAppointmentController::class, 'checkin'])->name('checkin');
+    Route::post('appointments/{appointment}/confirm', [\App\Http\Controllers\StaffAppointmentController::class, 'confirmArrival'])->name('appointments.confirm');
+    Route::get('appointments/{appointment}/ticket', [\App\Http\Controllers\StaffAppointmentController::class, 'ticket'])->name('appointments.ticket');
+    Route::post('checkin/scan', [\App\Http\Controllers\StaffAppointmentController::class, 'scanQr'])->name('checkin.scan');
 
     // Doctor Schedule with list of appointments (staff side)
     Route::get('doctor-schedules', [\App\Http\Controllers\StaffAppointmentController::class, 'doctorSchedules'])->name('doctor-schedules');

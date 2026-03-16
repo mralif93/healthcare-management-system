@@ -20,9 +20,15 @@
                 </div>
             </div>
         </div>
-        <a href="{{ route('staff.patients.index') }}" class="bg-slate-100 text-slate-500 px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">
-            Return to Registry
-        </a>
+        <div class="flex items-center space-x-3">
+            <a href="{{ route('staff.appointments.create', ['patient_id' => $patient->id]) }}" class="bg-brand-600 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest shadow-md hover:bg-brand-700 transition-all active:scale-95 flex items-center space-x-2">
+                <i class="hgi-stroke hgi-calendar-add-01"></i>
+                <span>Book Appointment</span>
+            </a>
+            <a href="{{ route('staff.patients.index') }}" class="bg-slate-100 text-slate-500 px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">
+                Return to Registry
+            </a>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

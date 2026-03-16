@@ -7,7 +7,9 @@ use App\Models\Patient;
 use App\Models\User;
 use App\Notifications\AppointmentBooked;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class StaffAppointmentController extends Controller
 {
@@ -49,10 +51,11 @@ class StaffAppointmentController extends Controller
 
         $validated['status'] = 'pending';
 
-        // Auto-generate appointment ID
+        // Auto-generate appointment ID and QR token
         $latest = Appointment::orderBy('id', 'desc')->first();
         $nextId = $latest ? (int) substr($latest->appointment_id, 4) + 1 : 1;
         $validated['appointment_id'] = 'APT-' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        $validated['qr_token'] = Str::uuid()->toString();
 
         $appointment = Appointment::create($validated);
 
@@ -72,16 +75,67 @@ class StaffAppointmentController extends Controller
             ->where('appointment_date', now()->toDateString())
             ->whereIn('status', ['pending', 'confirmed']);
 
-        if ($request->has('search')) {
-            $query->whereHas('patient', function($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('patient_id', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->whereHas('patient', function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('patient_id', 'like', '%' . $search . '%');
             });
         }
 
-        $appointments = $query->get();
+        $appointments = $query->orderBy('appointment_time')->get();
 
         return view('staff.checkin', compact('appointments'));
+    }
+
+    public function confirmArrival(Appointment $appointment)
+    {
+        if ($appointment->status === 'pending') {
+            $appointment->update(['status' => 'confirmed']);
+        }
+
+        return redirect()->route('staff.checkin')->with('success', "Patient {$appointment->patient->name} has been checked in successfully.");
+    }
+
+    public function ticket(Appointment $appointment)
+    {
+        $appointment->load(['patient', 'doctor']);
+
+        $qrSvg = QrCode::format('svg')
+            ->size(200)
+            ->errorCorrection('H')
+            ->generate($appointment->qr_token);
+
+        return view('staff.appointments.ticket', compact('appointment', 'qrSvg'));
+    }
+
+    public function scanQr(Request $request)
+    {
+        $request->validate(['qr_token' => 'required|string']);
+
+        $appointment = Appointment::with('patient')
+            ->where('qr_token', $request->qr_token)
+            ->first();
+
+        if (!$appointment) {
+            return redirect()->route('staff.checkin')->with('error', 'Invalid QR code. No matching appointment found.');
+        }
+
+        if ($appointment->appointment_date !== now()->toDateString()) {
+            return redirect()->route('staff.checkin')->with('error', "This QR is for {$appointment->appointment_date}, not today.");
+        }
+
+        if ($appointment->status === 'completed' || $appointment->status === 'cancelled') {
+            return redirect()->route('staff.checkin')->with('error', "Appointment {$appointment->appointment_id} is already {$appointment->status}.");
+        }
+
+        if ($appointment->status === 'confirmed') {
+            return redirect()->route('staff.checkin')->with('success', "Patient {$appointment->patient->name} is already checked in.");
+        }
+
+        $appointment->update(['status' => 'confirmed']);
+
+        return redirect()->route('staff.checkin')->with('success', "✓ QR Verified — {$appointment->patient->name} ({$appointment->appointment_id}) checked in.");
     }
 
     public function doctorSchedules(Request $request)

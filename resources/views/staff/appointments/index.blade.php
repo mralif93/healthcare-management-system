@@ -40,6 +40,7 @@
                         <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Patient Details</th>
                         <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Assigned Doctor</th>
                         <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Current Status</th>
+                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Ticket</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
@@ -71,9 +72,20 @@
                                 {{ $apt->status }}
                             </span>
                         </td>
+                        <td class="px-6 py-4 text-center">
+                            @if($apt->qr_token)
+                            <a href="{{ route('staff.appointments.ticket', $apt) }}" target="_blank"
+                               title="Print Ticket"
+                               class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-500 border border-indigo-100 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5a.5.5 0 11-1 0 .5.5 0 011 0zM6 20h4"/></svg>
+                            </a>
+                            @else
+                            <span class="text-slate-200 text-[9px]">—</span>
+                            @endif
+                        </td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="px-6 py-20 text-center text-slate-400 text-xs italic">No clinical bookings scheduled.</td></tr>
+                    <tr><td colspan="6" class="px-6 py-20 text-center text-slate-400 text-xs italic">No clinical bookings scheduled.</td></tr>
                     @endforelse
                 </tbody>
             </table>

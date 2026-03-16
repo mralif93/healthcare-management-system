@@ -46,7 +46,7 @@
                 <div>
                     <p class="text-sm font-bold text-slate-900">{{ $appointment->patient->name }}</p>
                     <p class="text-[10px] font-bold text-brand-600 uppercase tracking-widest mt-0.5">ID: {{ $appointment->patient->patient_id }}</p>
-                    <a href="{{ route('admin.patients.show', $appointment->patient_id) }}" class="text-[9px] font-black text-slate-400 uppercase tracking-widest hover:text-brand-600 mt-2 block transition-colors">View Medical Profile</a>
+                    <a href="{{ route('admin.patients.show', $appointment->patient) }}" class="text-[9px] font-black text-slate-400 uppercase tracking-widest hover:text-brand-600 mt-2 block transition-colors">View Medical Profile</a>
                 </div>
             </div>
         </div>
