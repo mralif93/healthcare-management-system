@@ -109,16 +109,101 @@ class StaffAppointmentController extends Controller
         return view('staff.appointments.ticket', compact('appointment', 'qrSvg'));
     }
 
+    public function whatsapp(Appointment $appointment)
+    {
+        $appointment->load(['patient', 'doctor']);
+
+        $rawPhone = preg_replace('/[^0-9]/', '', $appointment->patient->phone ?? '');
+        if (str_starts_with($rawPhone, '0')) {
+            $rawPhone = '60' . substr($rawPhone, 1);
+        }
+
+        if (!$rawPhone) {
+            return back()->with('error', 'Patient has no phone number on record.');
+        }
+
+        $doctorName = str_starts_with($appointment->doctor->name, 'Dr.')
+            ? $appointment->doctor->name
+            : 'Dr. ' . $appointment->doctor->name;
+
+        $message = implode('', [
+            "Hello {$appointment->patient->name},\n\n",
+            "Your appointment has been confirmed!\n\n",
+            "*Appointment ID:* {$appointment->appointment_id}\n",
+            "*Doctor:* {$doctorName}\n",
+            "*Date:* " . \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') . "\n",
+            "*Time:* " . \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') . "\n\n",
+            "Please arrive 15 minutes before your appointment time.\n\n",
+            "*Download your ticket (PDF):*\n" . route('appointments.public.ticket.pdf', $appointment->qr_token),
+        ]);
+
+        return redirect()->away('https://wa.me/' . $rawPhone . '?text=' . rawurlencode($message));
+    }
+
+    public function ticketPdf(Appointment $appointment)
+    {
+        $appointment->load(['patient', 'doctor']);
+
+        $qrSvg = QrCode::format('svg')
+            ->size(148)
+            ->errorCorrection('H')
+            ->generate($appointment->qr_token);
+
+        $qrDataUri = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
+            'staff.appointments.ticket-pdf',
+            compact('appointment', 'qrDataUri')
+        )->setPaper('a5', 'portrait');
+
+        return $pdf->stream("ticket-{$appointment->appointment_id}.pdf");
+    }
+
+    // Public — accessed via unguessable qr_token UUID, no login required
+    public function publicTicketPdf(string $token)
+    {
+        $appointment = Appointment::with(['patient', 'doctor'])
+            ->where('qr_token', $token)
+            ->firstOrFail();
+
+        $qrSvg = QrCode::format('svg')
+            ->size(148)
+            ->errorCorrection('H')
+            ->generate($appointment->qr_token);
+
+        $qrDataUri = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
+            'staff.appointments.ticket-pdf',
+            compact('appointment', 'qrDataUri')
+        )->setPaper('a5', 'portrait');
+
+        return $pdf->stream("ticket-{$appointment->appointment_id}.pdf");
+    }
+
     public function scanQr(Request $request)
     {
-        $request->validate(['qr_token' => 'required|string']);
+        $request->validate([
+            'qr_token'       => 'nullable|string',
+            'appointment_id' => 'nullable|string',
+        ]);
 
-        $appointment = Appointment::with('patient')
-            ->where('qr_token', $request->qr_token)
-            ->first();
+        // QR camera scan sends qr_token (UUID).
+        // Manual entry sends appointment_id (e.g. APT-00004).
+        $appointment = null;
+
+        if ($request->filled('qr_token')) {
+            $appointment = Appointment::with('patient')
+                ->where('qr_token', $request->qr_token)
+                ->first();
+        } elseif ($request->filled('appointment_id')) {
+            $appointment = Appointment::with('patient')
+                ->where('appointment_id', strtoupper(trim($request->appointment_id)))
+                ->first();
+        }
 
         if (!$appointment) {
-            return redirect()->route('staff.checkin')->with('error', 'Invalid QR code. No matching appointment found.');
+            return redirect()->route('staff.checkin')->with('error', 'No matching appointment found. Check the Appointment ID and try again.');
         }
 
         if ($appointment->appointment_date !== now()->toDateString()) {

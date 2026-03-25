@@ -27,26 +27,38 @@ return [
 
     'navigation' => [
         'admin' => [
-            ['name' => 'Dashboard', 'icon' => 'hgi-home-01', 'route' => 'admin.dashboard'],
-            ['name' => 'Patients', 'icon' => 'hgi-user-group', 'route' => 'admin.patients.index'],
-            ['name' => 'Staff', 'icon' => 'hgi-manager', 'route' => 'admin.staff.index'],
-            ['name' => 'Doctors', 'icon' => 'hgi-doctor-01', 'route' => 'admin.doctors.index'],
-            ['name' => 'Appointments', 'icon' => 'hgi-calendar-01', 'route' => 'admin.appointments.index'],
-            ['name' => 'Settings', 'icon' => 'hgi-settings-01', 'route' => 'admin.settings'],
+            // Overview
+            ['group' => 'Overview', 'name' => 'Dashboard', 'icon' => 'hgi-home-01', 'route' => 'admin.dashboard'],
+            // User Management
+            ['group' => 'Users Management', 'name' => 'Users', 'icon' => 'hgi-manager', 'route' => 'admin.users.index'],
+            ['group' => 'Users Management', 'name' => 'Patients', 'icon' => 'hgi-user-group', 'route' => 'admin.patients.index'],
+            ['group' => 'Users Management', 'name' => 'Doctors', 'icon' => 'hgi-user-multiple', 'route' => 'admin.doctors.index'],
+            // Appointments
+            ['group' => 'Appointments', 'name' => 'Appointments', 'icon' => 'hgi-calendar-01', 'route' => 'admin.appointments.index'],
+            // System
+            ['group' => 'System', 'name' => 'Settings',   'icon' => 'hgi-settings-01',  'route' => 'admin.settings'],
+            ['group' => 'System', 'name' => 'Audit Logs', 'icon' => 'hgi-activity-01',  'route' => 'admin.audit-logs.index'],
         ],
         'doctor' => [
-            ['name' => 'Dashboard', 'icon' => 'hgi-home-01', 'route' => 'doctor.dashboard'],
-            ['name' => 'My Patients', 'icon' => 'hgi-user-group', 'route' => 'doctor.patients.index'],
-            ['name' => 'Consultations', 'icon' => 'hgi-stethoscope', 'route' => 'doctor.consultations.index'],
-            ['name' => 'Schedule', 'icon' => 'hgi-calendar-01', 'route' => 'doctor.schedule'],
-            ['name' => 'My Profile', 'icon' => 'hgi-user-edit-01', 'route' => 'doctor.profile'],
+            // Overview
+            ['group' => 'Overview', 'name' => 'Dashboard', 'icon' => 'hgi-home-01', 'route' => 'doctor.dashboard'],
+            // Patients
+            ['group' => 'Patients', 'name' => 'Patients', 'icon' => 'hgi-user-group', 'route' => 'doctor.patients.index'],
+            // Consultations
+            ['group' => 'Consultations', 'name' => 'All Records', 'icon' => 'hgi-stethoscope', 'route' => 'doctor.consultations.index'],
+            // Schedule
+            ['group' => 'Schedule', 'name' => 'My Schedule', 'icon' => 'hgi-calendar-01', 'route' => 'doctor.schedule'],
         ],
         'staff' => [
-            ['name' => 'Dashboard', 'icon' => 'hgi-home-01', 'route' => 'staff.dashboard'],
-            ['name' => 'Registration', 'icon' => 'hgi-user-add-01', 'route' => 'staff.patients.create'],
-            ['name' => 'Bookings', 'icon' => 'hgi-calendar-add-01', 'route' => 'staff.appointments.create'],
-            ['name' => 'Check-in', 'icon' => 'hgi-qr-code-01', 'route' => 'staff.checkin'],
-            ['name' => 'My Profile', 'icon' => 'hgi-user-edit-01', 'route' => 'staff.profile'],
+            // Overview
+            ['group' => 'Overview', 'name' => 'Dashboard', 'icon' => 'hgi-home-01', 'route' => 'staff.dashboard'],
+            // Patient Management
+            ['group' => 'Patients', 'name' => 'Patients', 'icon' => 'hgi-user-group', 'route' => 'staff.patients.index'],
+            // Appointments
+            ['group' => 'Appointments', 'name' => 'Appointments', 'icon' => 'hgi-calendar-01', 'route' => 'staff.appointments.index'],
+            ['group' => 'Appointments', 'name' => 'Check-in', 'icon' => 'hgi-qr-code-01', 'route' => 'staff.checkin'],
+            // Schedules
+            ['group' => 'Schedules', 'name' => 'Doctor Schedules', 'icon' => 'hgi-doctor-01', 'route' => 'staff.doctor-schedules'],
         ],
     ],
 ];

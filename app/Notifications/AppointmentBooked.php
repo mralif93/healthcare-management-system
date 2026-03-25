@@ -27,7 +27,7 @@ class AppointmentBooked extends Notification
 
         return [
             'type'           => 'appointment_booked',
-            'icon'           => 'hgi-calendar-check-out',
+            'icon'           => 'hgi-calendar-check-out-01',
             'title'          => 'New Appointment Booked',
             'message'        => "Patient {$patient->name} is scheduled on {$date} at {$time}.",
             'appointment_id' => $this->appointment->id,

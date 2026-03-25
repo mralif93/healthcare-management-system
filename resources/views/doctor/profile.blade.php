@@ -6,32 +6,22 @@
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6 pb-20">
 
-    {{-- Profile Card --}}
-    <div class="bg-white rounded-xl border border-slate-200 p-8 shadow-sm flex items-center space-x-8">
-        <div class="w-24 h-24 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-600 shadow-inner shrink-0">
-            <i class="hgi-stroke hgi-doctor-01 text-5xl"></i>
-        </div>
-        <div>
-            <h2 class="text-2xl font-bold text-slate-900 leading-tight">Dr. {{ $user->name }}</h2>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">{{ ucfirst($user->role) }} &bull; Medical Practitioner</p>
-            <div class="mt-4 flex items-center space-x-2">
-                <span class="px-3 py-1 bg-slate-100 rounded-lg text-[9px] font-black text-slate-500 uppercase tracking-widest border border-slate-200">
-                    ID: {{ $user->staff_id }}
-                </span>
-                <span class="px-3 py-1 bg-green-50 rounded-lg text-[9px] font-black text-green-600 uppercase tracking-widest border border-green-100">
-                    Active Session
-                </span>
+    <!-- Hero Section -->
+    <div class="bg-emerald-600 rounded-2xl p-8 text-white shadow-xl shadow-emerald-100 relative overflow-hidden animate__animated animate__fadeInUp animate__faster">
+        <div class="flex items-center space-x-6">
+            <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30 shrink-0">
+                <i class="hgi-stroke hgi-doctor-01 text-4xl text-white"></i>
+            </div>
+            <div>
+                <p class="text-[9px] font-black uppercase tracking-[0.3em] text-white/60 mb-1">Clinical Module</p>
+                <h1 class="text-2xl font-black tracking-tight">Dr. {{ $user->name }}</h1>
+                <div class="flex items-center space-x-3 mt-2">
+                    <span class="px-3 py-1 bg-white/20 border border-white/30 rounded-lg text-[9px] font-black text-white uppercase tracking-widest">ID: {{ $user->staff_id }}</span>
+                    <span class="px-3 py-1 bg-green-400/30 border border-green-300/30 rounded-lg text-[9px] font-black text-white uppercase tracking-widest">Active Session</span>
+                </div>
             </div>
         </div>
     </div>
-
-    {{-- Flash Message --}}
-    @if(session('success'))
-        <div class="bg-green-500 text-white p-4 rounded-xl shadow-lg shadow-green-100 flex items-center space-x-3 animate__animated animate__fadeInDown animate__faster">
-            <i class="hgi-stroke hgi-checkmark-circle-02 text-lg"></i>
-            <p class="text-[10px] font-black uppercase tracking-widest">{{ session('success') }}</p>
-        </div>
-    @endif
 
     @if($errors->any())
         <div class="bg-red-500 text-white p-4 rounded-xl shadow-lg shadow-red-100 flex items-start space-x-3 animate__animated animate__fadeInDown animate__faster">
@@ -46,53 +36,77 @@
 
     {{-- Settings Form --}}
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest italic">Identity Synchronization</h3>
+        <!-- Card Header -->
+        <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center space-x-3">
+            <div class="w-9 h-9 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="hgi-stroke hgi-user-edit-01 text-emerald-600 text-lg"></i>
+            </div>
+            <div>
+                <h3 class="text-sm font-bold text-slate-900">Account Information</h3>
+                <p class="text-[10px] text-slate-400 font-medium mt-0.5">Update your display name, email and contact details</p>
+            </div>
         </div>
 
-        <form action="{{ route('doctor.profile.update') }}" method="POST" class="p-8 space-y-8">
+        <form action="{{ route('doctor.profile.update') }}" method="POST">
             @csrf @method('PUT')
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-1.5">
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Display Name</label>
-                    <input type="text" name="name" value="{{ old('name', $user->name) }}" required
-                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 outline-none transition-all">
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Work Email</label>
-                    <input type="email" name="email" value="{{ old('email', $user->email) }}" required
-                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 outline-none transition-all">
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Contact Phone</label>
-                    <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
-                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 outline-none transition-all">
-                </div>
-            </div>
-
-            <div class="pt-6 border-t border-slate-100">
-                <h4 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-6 italic">Security Gateway</h4>
+            <div class="p-8 space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-1.5">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">New Password</label>
-                        <input type="password" name="password" placeholder="Leave blank to keep current"
-                            class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 outline-none transition-all">
+                        <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+                            <i class="hgi-stroke hgi-user text-slate-400"></i> Full Name <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text" name="name" value="{{ old('name', $user->name) }}" required
+                            class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all shadow-sm">
                     </div>
+
                     <div class="space-y-1.5">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Confirm New Password</label>
-                        <input type="password" name="password_confirmation"
-                            class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 outline-none transition-all">
+                        <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+                            <i class="hgi-stroke hgi-mail-01 text-slate-400"></i> Work Email <span class="text-red-400">*</span>
+                        </label>
+                        <input type="email" name="email" value="{{ old('email', $user->email) }}" required
+                            class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all shadow-sm">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+                            <i class="hgi-stroke hgi-call text-slate-400"></i> Contact Phone
+                        </label>
+                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
+                            class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all shadow-sm">
+                    </div>
+                </div>
+
+                <!-- Password Section -->
+                <div class="pt-6 border-t border-slate-100">
+                    <h4 class="flex items-center gap-2 text-xs font-bold text-slate-700 mb-5">
+                        <i class="hgi-stroke hgi-lock-password text-emerald-600"></i> Change Password
+                        <span class="text-[10px] text-slate-400 font-normal ml-1">(Leave blank to keep current)</span>
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1.5">
+                            <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+                                <i class="hgi-stroke hgi-lock-01 text-slate-400"></i> New Password
+                            </label>
+                            <input type="password" name="password" placeholder="••••••••"
+                                class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all shadow-sm">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+                                <i class="hgi-stroke hgi-lock-01 text-slate-400"></i> Confirm Password
+                            </label>
+                            <input type="password" name="password_confirmation" placeholder="••••••••"
+                                class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all shadow-sm">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-6 flex justify-end">
-                <button type="submit"
-                    class="px-10 py-3 bg-slate-900 text-white rounded-lg text-[10px] font-black uppercase tracking-[0.3em] shadow-xl shadow-slate-200 hover:bg-brand-600 hover:-translate-y-0.5 transition-all active:scale-95">
-                    Sync Profile
+            <!-- Form Footer -->
+            <div class="px-8 py-5 bg-slate-50/70 border-t border-slate-100 flex justify-end">
+                <button type="submit" class="flex items-center space-x-2 px-7 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold shadow-lg shadow-emerald-100/50 hover:bg-emerald-700 transition-all active:scale-95">
+                    <i class="hgi-stroke hgi-checkmark-circle-02"></i>
+                    <span>Save Changes</span>
                 </button>
             </div>
         </form>

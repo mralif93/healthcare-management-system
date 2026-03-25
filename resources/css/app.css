@@ -6,6 +6,75 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Brand color palette — mapped to Tailwind's blue scale */
+    --color-brand-50:  #eff6ff;
+    --color-brand-100: #dbeafe;
+    --color-brand-200: #bfdbfe;
+    --color-brand-300: #93c5fd;
+    --color-brand-400: #60a5fa;
+    --color-brand-500: #3b82f6;
+    --color-brand-600: #2563eb;
+    --color-brand-700: #1d4ed8;
+    --color-brand-800: #1e40af;
+    --color-brand-900: #1e3a8a;
+    --color-brand-950: #172554;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Safari / WebKit compatibility fixes
+   Tailwind CSS v4 does not ship with autoprefixer, so we
+   manually add -webkit- prefixes for properties that still
+   require them in Safari.
+   ───────────────────────────────────────────────────────────── */
+
+/* backdrop-blur: Safari 15 needs -webkit-backdrop-filter */
+.backdrop-blur-sm  { -webkit-backdrop-filter: blur(4px);   backdrop-filter: blur(4px); }
+.backdrop-blur     { -webkit-backdrop-filter: blur(8px);   backdrop-filter: blur(8px); }
+.backdrop-blur-md  { -webkit-backdrop-filter: blur(12px);  backdrop-filter: blur(12px); }
+.backdrop-blur-lg  { -webkit-backdrop-filter: blur(16px);  backdrop-filter: blur(16px); }
+.backdrop-blur-xl  { -webkit-backdrop-filter: blur(24px);  backdrop-filter: blur(24px); }
+.backdrop-blur-2xl { -webkit-backdrop-filter: blur(40px);  backdrop-filter: blur(40px); }
+.backdrop-blur-3xl { -webkit-backdrop-filter: blur(64px);  backdrop-filter: blur(64px); }
+
+/* ::selection — Safari needs -webkit-selection (older builds) */
+::-webkit-selection { background-color: var(--color-brand-100); color: var(--color-brand-900); }
+::selection         { background-color: var(--color-brand-100); color: var(--color-brand-900); }
+
+/* Smooth momentum scrolling on iOS for any overflow-y-auto container */
+.overflow-y-auto,
+.overflow-y-scroll {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* GPU compositing — prevents Safari from blurring text during CSS transforms/animations */
+.animate__animated {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Prevent iOS Safari from zooming inputs on focus (font-size < 16px) */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+select,
+textarea {
+    font-size: 16px;
+}
+@media (min-width: 640px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    select,
+    textarea {
+        font-size: 0.875rem; /* restore text-sm on sm+ screens */
+    }
 }

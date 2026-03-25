@@ -5,16 +5,23 @@
 
 @section('content')
 <div class="mx-auto space-y-6">
-    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-wrap justify-between items-center gap-4">
-        <form action="{{ route('doctor.schedule') }}" method="GET" class="flex items-center space-x-4">
-            <label for="date" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Select Date</label>
-            <input type="date" name="date" id="date" value="{{ $date }}" 
-                onchange="this.form.submit()"
-                class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-xs font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 outline-none transition-all">
-        </form>
-        <div class="text-right">
-            <h3 class="text-lg font-bold text-slate-900 leading-none">{{ \Carbon\Carbon::parse($date)->format('l, M d') }}</h3>
-            <p class="text-[10px] font-black text-brand-600 uppercase tracking-widest mt-1">{{ count($appointments) }} Clinical Sessions</p>
+
+    <!-- Hero Section -->
+    <div class="bg-emerald-600 rounded-2xl p-8 text-white shadow-xl shadow-emerald-100 relative overflow-hidden animate__animated animate__fadeInUp animate__faster">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+                <p class="text-[9px] font-black uppercase tracking-[0.3em] text-white/60 mb-1">Clinical Module</p>
+                <h1 class="text-2xl font-black tracking-tight">Daily Schedule</h1>
+                <p class="text-sm text-white/70 mt-1">
+                    {{ \Carbon\Carbon::parse($date)->format('l, F j, Y') }} &bull; {{ count($appointments) }} Sessions
+                </p>
+            </div>
+            <form action="{{ route('doctor.schedule') }}" method="GET" class="flex items-center space-x-3">
+                <label for="date" class="text-[10px] font-black text-white/60 uppercase tracking-widest shrink-0">Date</label>
+                <input type="date" name="date" id="date" value="{{ $date }}"
+                    onchange="this.form.submit()"
+                    class="bg-white/20 border border-white/30 backdrop-blur-sm rounded-xl px-4 py-2 text-xs font-bold text-white placeholder-white/50 focus:bg-white/30 outline-none transition-all">
+            </form>
         </div>
     </div>
 
@@ -54,7 +61,7 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             @if($apt->status !== 'completed' && $apt->status !== 'cancelled')
-                                <a href="{{ route('doctor.consultations.create', $apt->id) }}" class="inline-flex px-4 py-1.5 bg-brand-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest shadow-md hover:bg-brand-700 transition-all active:scale-95">
+                                <a href="{{ route('doctor.consultations.create', $apt->id) }}" class="inline-flex px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest shadow-md hover:bg-emerald-700 transition-all active:scale-95">
                                     Start Consult
                                 </a>
                             @else

@@ -5,29 +5,37 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex items-center justify-between">
-        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest italic">Operational Directory</h3>
-        <a href="{{ route('staff.patients.create') }}" class="bg-brand-600 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest shadow-md hover:bg-brand-700 transition-all active:scale-95 flex items-center space-x-2">
-            <i class="hgi-stroke hgi-user-add-01"></i>
-            <span>Register New Patient</span>
-        </a>
-    </div>
 
-    @if(session('success'))
-    <div class="p-4 bg-green-50 border border-green-100 rounded-xl text-green-600 flex items-center space-x-3">
-        <i class="hgi-stroke hgi-checkmark-circle-02"></i>
-        <p class="text-[10px] font-black uppercase tracking-widest">{{ session('success') }}</p>
+    <!-- Hero Section -->
+    <div class="bg-indigo-600 rounded-2xl p-8 text-white shadow-xl shadow-indigo-100 relative overflow-hidden animate__animated animate__fadeInUp animate__faster">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+                <p class="text-[9px] font-black uppercase tracking-[0.3em] text-white/60 mb-1">Staff Operations</p>
+                <h1 class="text-2xl font-black tracking-tight">Patients Management</h1>
+                <p class="text-sm text-white/70 mt-1">Patient records &amp; medical files</p>
+            </div>
+            <a href="{{ route('staff.patients.create') }}" class="px-5 py-2.5 bg-white/20 hover:bg-white/30 border border-white/30 backdrop-blur-sm text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center space-x-2 shrink-0">
+                <i class="hgi-stroke hgi-user-add-01"></i>
+                <span>Create New Patient</span>
+            </a>
+        </div>
     </div>
-    @endif
 
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-slate-100 bg-slate-50/50">
-            <form action="{{ route('staff.patients.index') }}" method="GET" class="flex gap-2">
-                <div class="relative flex-1">
-                    <i class="hgi-stroke hgi-search-01 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, ID, or phone..." class="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-4 py-2 text-xs font-medium focus:ring-2 focus:ring-brand-500/10 focus:border-brand-500 outline-none transition-all">
+        <div class="p-5 border-b border-slate-100 bg-slate-50/50">
+            <form action="{{ route('staff.patients.index') }}" method="GET" class="flex items-center gap-3">
+                <div class="flex-1 flex items-center gap-2.5 bg-white border border-slate-200 rounded-xl px-3.5 focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500 transition-all">
+                    <i class="hgi-stroke hgi-search-01 text-slate-400 text-sm flex-shrink-0"></i>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, ID, or phone..."
+                           class="flex-1 py-2.5 text-xs font-medium outline-none bg-transparent placeholder:text-slate-400">
                 </div>
-                <button type="submit" class="bg-slate-900 text-white px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-black transition-all">Search Registry</button>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center space-x-2 active:scale-95 flex-shrink-0">
+                    <i class="hgi-stroke hgi-search-01 text-sm"></i>
+                    <span>Search</span>
+                </button>
+                @if(request('search'))
+                    <a href="{{ route('staff.patients.index') }}" class="text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0">× Clear</a>
+                @endif
             </form>
         </div>
 
@@ -45,7 +53,7 @@
                 <tbody class="divide-y divide-slate-50">
                     @forelse($patients as $patient)
                     <tr class="hover:bg-slate-50/50 transition-colors group text-xs">
-                        <td class="px-6 py-4 font-black text-brand-600 uppercase tracking-tighter">{{ $patient->patient_id }}</td>
+                        <td class="px-6 py-4 font-black text-indigo-600 uppercase tracking-tighter">{{ $patient->patient_id }}</td>
                         <td class="px-6 py-4 font-bold text-slate-900">{{ $patient->name }}</td>
                         <td class="px-6 py-4 font-medium text-slate-600"><span class="capitalize">{{ $patient->gender }}</span>, {{ $patient->age }} yrs</td>
                         <td class="px-6 py-4 font-bold text-slate-500">{{ $patient->phone }}</td>

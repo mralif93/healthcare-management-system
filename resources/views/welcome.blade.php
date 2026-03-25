@@ -15,11 +15,8 @@
                 <span class="text-sm font-black text-slate-900 uppercase tracking-widest">{{ config('app.name') }}</span>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="{{ route('login') }}" class="text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-slate-900 transition-colors">
-                    Sign In
-                </a>
                 <a href="{{ route('login') }}" class="bg-brand-600 text-white px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-700 transition-all shadow-md shadow-brand-100 active:scale-95">
-                    Access Portal
+                    Sign In
                 </a>
             </div>
         </div>

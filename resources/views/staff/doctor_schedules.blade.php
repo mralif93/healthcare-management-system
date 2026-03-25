@@ -1,17 +1,27 @@
 @extends('layouts.staff')
 
 @section('title', 'Doctor Schedules')
-@section('page_title', 'Clinical Calendar')
+@section('page_title', 'Doctor Calendar')
 
 @section('content')
 <div class="space-y-6">
+
+    <!-- Hero Section -->
+    <div class="bg-indigo-600 rounded-2xl p-8 text-white shadow-xl shadow-indigo-100 relative overflow-hidden animate__animated animate__fadeInUp animate__faster">
+        <div>
+            <p class="text-[9px] font-black uppercase tracking-[0.3em] text-white/60 mb-1">Staff Operations</p>
+            <h1 class="text-2xl font-black tracking-tight">Doctor Schedules</h1>
+            <p class="text-sm text-white/70 mt-1">Doctor schedules &amp; daily agenda</p>
+        </div>
+    </div>
+
     <!-- Filter Section -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
         <form action="{{ route('staff.doctor-schedules') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end text-xs">
             <div class="space-y-1.5">
                 <label for="doctor_id" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Select Specialist</label>
                 <select name="doctor_id" id="doctor_id" required
-                    class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 transition-all outline-none">
+                    class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
                     <option value="">-- Choose Doctor --</option>
                     @foreach($doctors as $doctor)
                         <option value="{{ $doctor->id }}" {{ $selectedDoctorId == $doctor->id ? 'selected' : '' }}>
@@ -23,7 +33,7 @@
             <div class="space-y-1.5">
                 <label for="date" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Calendar Date</label>
                 <input type="date" name="date" id="date" value="{{ $date }}" required
-                    class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500 transition-all outline-none">
+                    class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 font-bold text-slate-900 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
             </div>
             <button type="submit" class="w-full bg-slate-900 text-white px-6 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] hover:bg-black transition-all shadow-lg shadow-slate-100">
                 Synchronize Schedule
@@ -33,8 +43,8 @@
 
     @if($selectedDoctorId)
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100 bg-brand-50/30 flex justify-between items-center">
-                <h3 class="text-xs font-black text-brand-600 uppercase tracking-widest">
+            <div class="px-6 py-4 border-b border-slate-100 bg-indigo-50/30 flex justify-between items-center">
+                <h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest">
                     Agenda for Dr. {{ $doctors->find($selectedDoctorId)->name }} • {{ \Carbon\Carbon::parse($date)->format('M d, Y') }}
                 </h3>
                 <span class="text-[10px] font-black bg-white text-slate-500 px-3 py-1 rounded-full border border-slate-100 uppercase tracking-widest shadow-sm">
